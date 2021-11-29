@@ -135,7 +135,13 @@ function isCyclic(graph) {
  */
 function allCycles(graph) {
   const visitedNodes = new Array(graph.size).fill(false);
+
+  // Not stack ADT, checks if indexed vertex have been on stack
+  // Not using real stack or fake stack with unordered array
+  // Because with this method each lookup will be O(1)
   const recursionStack = new Array(graph.size).fill(false);
+
+  // Real stack to pretty print
   const stack = [];
 
   let count = 0;
@@ -170,6 +176,7 @@ function allCycles(graph) {
     stack.pop(index);
   };
 
+  // Graph can be disconnected, need to brute force from every vertex
   for (let i = 0; i < graph.adjacencyList.length; i += 1) {
     recur(i);
   }
