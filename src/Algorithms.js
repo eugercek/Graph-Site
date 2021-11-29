@@ -4,6 +4,12 @@ import Queue from "./Queue";
 
 /**
  * @param {Graph} graph
+ *
+ * Start recursion from a vertex.
+ * - If vertex visited return
+ * - Else
+ *   - Set vertex visited
+ *   - Call all direct neighbors of vertex (Some of them will wait in STACK!)
  */
 function dfs(graph, start = 0) {
   const visitedNodes = new Array(graph.size).fill(false);
@@ -27,11 +33,20 @@ function dfs(graph, start = 0) {
 
 /**
  * @param {Graph} graph
+ *
+ * Enqueue the initial vertex.
+ *
+ * LOOP until queue is empty
+ *   - Dequeue current vertex.
+ *   - Enqueue all neighbors of the vertex.
+ *
  */
 function bfs(graph, start = 0) {
   const queue = new Queue();
   const visitedNodes = new Array(graph.size).fill(false);
 
+  // Don't forget to enqueue the initial vertex
+  // Main logic is while queue is not empty
   queue.enqueue(start);
   visitedNodes[start] = true;
 
@@ -58,17 +73,24 @@ function isCyclic(graph) {
   const visitedNodes = new Array(graph.size).fill(false);
   const recursionStack = new Array(graph.size).fill(false);
 
-  graph.adjacencyList.forEach((a) => a);
-
   /**
    * @param {integer} index
    * @returns {boolean}
+   * DFS
    */
   const recur = (index) => {
+    // If encountered same vertex in "a run" then we've cycled!
+    // 0 -> 1 -> 2 -> 0
     if (recursionStack[index]) {
       return true;
     }
 
+    // Below says it has been there and there is no cycle
+
+    // When stack is 0 5 2
+    // Program will see that It's already tried 2 -> 3 -> 4 path
+    // 0 -> 1 -> 2 -> 3 -> 4
+    //   ->   5 -^
     if (visitedNodes[index]) {
       return false;
     }
@@ -78,18 +100,26 @@ function isCyclic(graph) {
 
     const neighbors = graph.adjacencyList[index];
 
+    // Simple DFS
     if (neighbors.some((n) => recur(n))) {
       return true;
     }
 
+    // Below means we are backtracking from the vertex, it'll pe popped from stack
+    // But it'll be still reside in `visited` in above we've tried all the possible paths and
+    // If code is here then there is no cycle
     recursionStack[index] = false;
 
     return false;
   };
 
+  // If any search of cycle(with DFS in this algorithm) return true then we've found the cycle!
   if (graph.adjacencyList.some((i) => recur(i))) {
     return true;
   }
+
+  // If no cycle detected starting from every vertex one by one
+  // Then there is no cycle :)
   return false;
 }
 
