@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // eslint-disable-next-line no-unused-vars
 import Graph from "./Graph";
 import Queue from "./Queue";
@@ -80,8 +81,8 @@ function isCyclic(graph) {
    */
   const recur = (index) => {
     // If encountered same vertex in "a run" then we've cycled!
-    // 0 -> 1 -> 2 -> 0
     if (recursionStack[index]) {
+      console.log(index);
       return true;
     }
 
@@ -97,6 +98,8 @@ function isCyclic(graph) {
 
     visitedNodes[index] = true;
     recursionStack[index] = true;
+
+    console.log(index);
 
     const neighbors = graph.adjacencyList[index];
 
@@ -114,8 +117,10 @@ function isCyclic(graph) {
   };
 
   // If any search of cycle(with DFS in this algorithm) return true then we've found the cycle!
-  if (graph.adjacencyList.some((i) => recur(i))) {
-    return true;
+  for (let i = 0; i < graph.adjacencyList.length; i += 1) {
+    if (recur(i)) {
+      return true;
+    }
   }
 
   // If no cycle detected starting from every vertex one by one
@@ -123,4 +128,53 @@ function isCyclic(graph) {
   return false;
 }
 
-export { dfs, isCyclic, bfs };
+/**
+ * @param {integer} index
+ * @returns {integer}
+ * DFS
+ */
+function allCycles(graph) {
+  const visitedNodes = new Array(graph.size).fill(false);
+  const recursionStack = new Array(graph.size).fill(false);
+  const stack = [];
+
+  let count = 0;
+
+  /**
+   * @param {integer} index
+   * DFS
+   */
+  const recur = (index) => {
+    if (recursionStack[index]) {
+      console.log(stack);
+      count += 1;
+      // Return means backtrack manually
+      return;
+    }
+
+    if (visitedNodes[index] !== false) {
+      return;
+    }
+
+    visitedNodes[index] = true;
+    recursionStack[index] = true;
+
+    stack.push(index);
+
+    const neighbors = graph.adjacencyList[index];
+
+    // Simple DFS
+    neighbors.forEach((n) => recur(n));
+
+    recursionStack[index] = false;
+    stack.pop(index);
+  };
+
+  for (let i = 0; i < graph.adjacencyList.length; i += 1) {
+    recur(i);
+  }
+
+  return count;
+}
+
+export { dfs, isCyclic, bfs, allCycles };
