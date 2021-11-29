@@ -1,7 +1,7 @@
 import Graph from "./Graph";
-import { dfs } from "./Algorithms";
+import { dfs, isCyclic, bfs } from "./Algorithms";
 
-const foo = new Graph(10);
+const foo = new Graph(7);
 
 /* eslint-disable */
 foo.addEdge(0, 1);
@@ -22,4 +22,4 @@ foo.addEdge(5, 6);
 
 foo.toString();
 
-dfs(foo);
+bfs(foo);
