@@ -225,18 +225,21 @@ function prim(graph) {
     }
   };
 
+  valueArray[0] = 0;
+  parentArray[0] = -1; // First node is always root of MST
+
   // Edge = Vertices -1
   for (let i = 0; i < graph.size - 1; i++) {
     const min = minVertex();
     setMST[min] = true;
 
-    for (let j = 0; i < graph.size; j++) {
+    for (let j = 0; j < graph.size; j++) {
       if (
         graph.adjacencyMatrix[min][j] && // If there is edge between min and j
         setMST[j] === false && // If j is already included there is no need to relax
         graph.adjacencyMatrix[min][j] < valueArray[j] // TODO I don't know
       ) {
-        valueArray[j] = graph[min][j];
+        valueArray[j] = graph.adjacencyMatrix[min][j];
         parentArray[j] = min;
       }
     }
