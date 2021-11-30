@@ -220,7 +220,9 @@ function prim(graph) {
     for (let i = 1; i < graph.size; i++) {
       // parentArray[i] is the connected vertex
       console.log(
-        `${parentArray[i]} -> ${graph.adjacencyMatrix[i][parentArray[i]]}`
+        `${parentArray[i]} ->  ${i} (${
+          graph.adjacencyMatrix[i][parentArray[i]]
+        })`
       );
     }
   };

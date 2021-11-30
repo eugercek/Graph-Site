@@ -54,19 +54,19 @@ console.groupEnd(groups.allCycles);
 
 const bar = new WeightedGraph(7);
 
-bar.addEdgeWithWeight(0, 1, 2);
-bar.addEdgeWithWeight(1, 2, 3);
-bar.addEdgeWithWeight(1, 5, 1);
+bar.addEdgeWithWeight(0, 1, 12);
+bar.addEdgeWithWeight(1, 2, 13);
+bar.addEdgeWithWeight(1, 5, 11);
 
-bar.addEdgeWithWeight(2, 0, 1);
-bar.addEdgeWithWeight(2, 3, 8);
+bar.addEdgeWithWeight(2, 0, 11);
+bar.addEdgeWithWeight(2, 3, 18);
 
-bar.addEdgeWithWeight(3, 4, 5);
+bar.addEdgeWithWeight(3, 4, 15);
 
-bar.addEdgeWithWeight(4, 0, 7);
-bar.addEdgeWithWeight(4, 6, 10);
+bar.addEdgeWithWeight(4, 0, 17);
+bar.addEdgeWithWeight(4, 6, 110);
 
-bar.addEdgeWithWeight(5, 6, 2);
+bar.addEdgeWithWeight(5, 6, 12);
 
 console.group(groups.prim);
 prim(bar);
