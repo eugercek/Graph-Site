@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import Graph from "./Graph";
-import { dfs, isCyclic, bfs, allCycles } from "./Algorithms";
+import { dfs, isCyclic, bfs, allCycles, prim } from "./Algorithms";
+import WeightedGraph from "./WeightedGraph";
 
 const foo = new Graph(7);
 
@@ -10,11 +11,11 @@ const groups = {
   cyclic: "Is Cyclic?",
   bfs: "Breadth First Traversal",
   allCycles: "List all cycles",
+  prim: "Prim's algorithm",
 };
 
 /* eslint-disable */
 foo.addEdge(0, 1);
-isCyclic;
 foo.addEdge(1, 2);
 foo.addEdge(1, 5);
 
@@ -50,3 +51,23 @@ console.log(cycleCount);
 console.groupEnd(groups.allCycles);
 
 /* eslint-enable */
+
+const bar = new WeightedGraph(7);
+
+bar.addEdgeWithWeight(0, 1, 2);
+bar.addEdgeWithWeight(1, 2, 3);
+bar.addEdgeWithWeight(1, 5, 1);
+
+bar.addEdgeWithWeight(2, 0, 1);
+bar.addEdgeWithWeight(2, 3, 8);
+
+bar.addEdgeWithWeight(3, 4, 5);
+
+bar.addEdgeWithWeight(4, 0, 7);
+bar.addEdgeWithWeight(4, 6, 10);
+
+bar.addEdgeWithWeight(5, 6, 2);
+
+console.group(groups.prim);
+prim(bar);
+console.groupEnd(groups.prim);

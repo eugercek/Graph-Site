@@ -1,7 +1,11 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-plusplus */
 /* eslint-disable no-console */
 // eslint-disable-next-line no-unused-vars
+
 import Graph from "./Graph";
 import Queue from "./Queue";
+import WeightedGraph from "./WeightedGraph";
 
 /**
  * @param {Graph} graph
@@ -184,4 +188,61 @@ function allCycles(graph) {
   return count;
 }
 
-export { dfs, isCyclic, bfs, allCycles };
+/**
+ *
+ * @param {WeightedGraph} graph
+ */
+function prim(graph) {
+  const valueArray = new Array(graph.size).fill(Number.MAX_SAFE_INTEGER);
+
+  // Which vertex have been added
+  const setMST = new Array(graph.size).fill(false);
+
+  const parentArray = new Array(graph.size);
+
+  const minVertex = () => {
+    let min = Number.MAX_SAFE_INTEGER;
+    let vertex;
+
+    for (let i = 0; i < graph.size; i++) {
+      // If haven't visited and smallest we have seen
+      if (setMST[i] === false && valueArray[i] < min) {
+        vertex = i;
+        min = valueArray[i];
+      }
+    }
+
+    return vertex;
+  };
+
+  const printParent = () => {
+    // Starting from 1 because first node can't have Parent it's the root
+    for (let i = 1; i < graph.size; i++) {
+      // parentArray[i] is the connected vertex
+      console.log(
+        `${parentArray[i]} -> ${graph.adjacencyMatrix[i][parentArray[i]]}`
+      );
+    }
+  };
+
+  // Edge = Vertices -1
+  for (let i = 0; i < graph.size - 1; i++) {
+    const min = minVertex();
+    setMST[min] = true;
+
+    for (let j = 0; i < graph.size; j++) {
+      if (
+        graph.adjacencyMatrix[min][j] && // If there is edge between min and j
+        setMST[j] === false && // If j is already included there is no need to relax
+        graph.adjacencyMatrix[min][j] < valueArray[j] // TODO I don't know
+      ) {
+        valueArray[j] = graph[min][j];
+        parentArray[j] = min;
+      }
+    }
+  }
+
+  printParent();
+}
+
+export { dfs, isCyclic, bfs, allCycles, prim };
