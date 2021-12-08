@@ -5,6 +5,7 @@
 
 import Graph from "./Graph";
 import Queue from "./Queue";
+import UndirectedGraph from "./UndirectedGraph";
 import WeightedGraph from "./WeightedGraph";
 
 /**
@@ -88,10 +89,9 @@ function bfs(graph, start = 0) {
 
   In the use of Adjacency Matrix instead of Adjacency List their complexity will be O(V^2)
 */
-
 /**
  * @param {Graph} graph
- * @returns {number}
+ * @returns {boolean}
  */
 function isCyclic(graph) {
   const visitedNodes = new Array(graph.size).fill(false);
@@ -149,6 +149,53 @@ function isCyclic(graph) {
 
   // If no cycle detected starting from every vertex one by one
   // Then there is no cycle :)
+  return false;
+}
+
+/*
+  We can't use above function because 0 -> 1 -> 0 will happen immediately
+  We'll look at the recursion stack but first degree parent won't be counted as cycle
+*/
+/**
+ * @param {UndirectedGraph} graph
+ * @returns {boolean}
+ */
+function isCyclicUndirected(graph) {
+  const visitedNodes = new Array(graph.size).fill(false);
+  const recursionStack = new Array(graph.size).fill(false);
+
+  const recur = (index, parent) => {
+    if (recursionStack[index] !== false) {
+      console.log(recursionStack);
+      return true;
+    }
+
+    if (visitedNodes[index] === true) {
+      return false;
+    }
+
+    visitedNodes[index] = true;
+    recursionStack[index] = index;
+
+    if (
+      graph.adjacencyList[index]
+        .filter((v) => v !== parent)
+        .some((v) => recur(v, index))
+    ) {
+      return true;
+    }
+    recursionStack[index] = false;
+
+    return false;
+  };
+
+  for (let i = 0; i < graph.adjacencyList.length; i += 1) {
+    // We are starting to search (DFS) from this node
+    if (recur(i, "NO_PARENT")) {
+      return true;
+    }
+  }
+
   return false;
 }
 
@@ -270,4 +317,4 @@ function prim(graph) {
   printParent();
 }
 
-export { dfs, isCyclic, bfs, allCycles, prim };
+export { dfs, isCyclic, isCyclicUndirected, bfs, allCycles, prim };

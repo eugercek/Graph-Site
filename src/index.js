@@ -1,6 +1,14 @@
 /* eslint-disable no-console */
 import Graph from "./Graph";
-import { dfs, isCyclic, bfs, allCycles, prim } from "./Algorithms";
+import UndirectedGraph from "./UndirectedGraph";
+import {
+  dfs,
+  isCyclic,
+  bfs,
+  allCycles,
+  prim,
+  isCyclicUndirected,
+} from "./Algorithms";
 import WeightedGraph from "./WeightedGraph";
 
 const foo = new Graph(7);
@@ -12,6 +20,7 @@ const groups = {
   bfs: "Breadth First Traversal",
   allCycles: "List all cycles",
   prim: "Prim's algorithm",
+  undirected: "Undirected",
 };
 
 /* eslint-disable */
@@ -42,7 +51,7 @@ console.groupEnd(groups.bfs);
 
 console.group(groups.cyclic);
 const isCyclicVal = isCyclic(foo);
-console.log(isCyclicVal);
+console.log(isCyclicVal, "color: green");
 console.groupEnd(groups.cyclic);
 
 console.group(groups.allCycles);
@@ -71,3 +80,28 @@ bar.addEdgeWithWeight(5, 6, 12);
 console.group(groups.prim);
 prim(bar);
 console.groupEnd(groups.prim);
+
+bar.createAdjacencyList();
+
+const baz = new UndirectedGraph(7);
+
+baz.addEdge(0, 1);
+baz.addEdge(1, 2);
+baz.addEdge(1, 5);
+
+baz.addEdge(2, 0);
+baz.addEdge(2, 3);
+
+baz.addEdge(3, 4);
+
+baz.addEdge(4, 0);
+baz.addEdge(4, 6);
+baz.addEdge(5, 6);
+
+console.group(groups.undirected);
+console.dir(baz.adjacencyList);
+console.group(groups.cyclic);
+isCyclicUndirected(baz);
+console.groupEnd(groups.cyclic);
+
+console.groupEnd(groups.undirected);
