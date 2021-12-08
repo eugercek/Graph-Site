@@ -19,10 +19,20 @@ import WeightedGraph from "./WeightedGraph";
 function dfs(graph, start = 0) {
   const visitedNodes = new Array(graph.size).fill(false);
 
+  // `recur` is the real dfs
   const recur = (index) => {
+    // If a node has already visited there is 2 possibility
+
+    // Haven't finished (1), there are other branches of the node yet
+    // (1) -> 2 -> (1)
+    //     -> 3
+
+    // Already discovered every possibility from that node
+    // In this case there is no need to do same operation without any change
     if (visitedNodes[index]) {
       return;
     }
+
     console.log(index);
 
     visitedNodes[index] = true;
@@ -61,6 +71,7 @@ function bfs(graph, start = 0) {
     console.log(current);
 
     const neighbors = graph.adjacencyList[current];
+
     neighbors.forEach((neighbor) => {
       if (visitedNodes[neighbor] === false) {
         queue.enqueue(neighbor);
@@ -69,6 +80,14 @@ function bfs(graph, start = 0) {
     });
   }
 }
+
+/*
+  Both DFS and BFS are O(V + E)
+  The reason is it will go V vertex in each vertex it'll go degree(vertex) edge.
+  Sum of all degree(vertex) are two times E.
+
+  In the use of Adjacency Matrix instead of Adjacency List their complexity will be O(V^2)
+*/
 
 /**
  * @param {Graph} graph
