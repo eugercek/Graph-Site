@@ -8,6 +8,7 @@ import {
   allCycles,
   prim,
   isCyclicUndirected,
+  topologicalSort,
 } from "./Algorithms";
 import WeightedGraph from "./WeightedGraph";
 
@@ -21,6 +22,7 @@ const groups = {
   allCycles: "List all cycles",
   prim: "Prim's algorithm",
   undirected: "Undirected",
+  topological: "Topological sort",
 };
 
 /* eslint-disable */
@@ -101,7 +103,24 @@ baz.addEdge(5, 6);
 console.group(groups.undirected);
 console.dir(baz.adjacencyList);
 console.group(groups.cyclic);
-isCyclicUndirected(baz);
+console.log(isCyclicUndirected(baz));
 console.groupEnd(groups.cyclic);
 
 console.groupEnd(groups.undirected);
+
+const topo = new Graph(7);
+
+topo.addEdge(0, 1);
+topo.addEdge(1, 2);
+topo.addEdge(1, 5);
+
+topo.addEdge(2, 3);
+
+topo.addEdge(3, 4);
+
+topo.addEdge(4, 6);
+
+console.group(groups.topological);
+console.dir(topo);
+topologicalSort(topo);
+console.groupEnd(groups.topological);

@@ -256,7 +256,6 @@ function allCycles(graph) {
 }
 
 /**
- *
  * @param {WeightedGraph} graph
  */
 function prim(graph) {
@@ -317,4 +316,48 @@ function prim(graph) {
   printParent();
 }
 
-export { dfs, isCyclic, isCyclicUndirected, bfs, allCycles, prim };
+/**
+ * @param {WeightedGraph} graph
+ * @returns {Array}
+ */
+function topologicalSort(graph) {
+  if (isCyclic(graph)) {
+    throw new Error("Topological sort can't used on cyclic graphs.");
+  }
+
+  const visitedNodes = new Array(graph.size).fill(false);
+  const order = [];
+
+  const recur = (index) => {
+    if (visitedNodes[index] !== false) {
+      return;
+    }
+
+    const neighbors = graph.adjacencyList[index];
+
+    neighbors.forEach((n) => recur(n));
+
+    order.push(index);
+  };
+
+  for (let i = 0; i < graph.adjacencyList.length; i++) {
+    if (visitedNodes[i] !== false) {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    recur(i);
+  }
+
+  return order.reverse();
+}
+
+export {
+  dfs,
+  isCyclic,
+  isCyclicUndirected,
+  bfs,
+  allCycles,
+  prim,
+  topologicalSort,
+};
