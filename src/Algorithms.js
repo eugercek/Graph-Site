@@ -109,12 +109,11 @@ function isCyclic(graph) {
       return true;
     }
 
-    // Below says it has been there and there is no cycle
-
     // When stack is 0 5 2
     // Program will see that It's already tried 2 -> 3 -> 4 path
-    // 0 -> 1 -> 2 -> 3 -> 4
-    //   ->   5 -^
+    // Past: 0 -> 1 -> 2 -> 3 -> 4
+    // Now:  0 -> 5 -^
+    // Below says it has been there and there is no cycle
     if (visitedNodes[index]) {
       return false;
     }
@@ -140,7 +139,9 @@ function isCyclic(graph) {
   };
 
   // If any search of cycle(with DFS in this algorithm) return true then we've found the cycle!
+  // The reason for starting from each vertex having the ability of finding cycles in disconnected graphs too
   for (let i = 0; i < graph.adjacencyList.length; i += 1) {
+    // If DFS has same element in recursion stack
     if (recur(i)) {
       return true;
     }
