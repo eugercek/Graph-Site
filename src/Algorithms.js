@@ -76,6 +76,8 @@ function bfs(graph, start = 0) {
     neighbors.forEach((neighbor) => {
       if (visitedNodes[neighbor] === false) {
         queue.enqueue(neighbor);
+        // We haven't visited `neighbor` literally but it'll visited because it's on queue
+        // So no need to enqueue again
         visitedNodes[neighbor] = true;
       }
     });
@@ -353,7 +355,7 @@ function topologicalSort(graph) {
 }
 
 /**
- * @param {WeightedGraph} graph
+ * @param {UndirectedGraph} graph
  * @returns {number}
  */
 function connectedComponents(graph) {
@@ -390,6 +392,56 @@ function connectedComponents(graph) {
   return id;
 }
 
+/**
+ * @param {UndirectedGraph} graph
+ * @returns {Array}
+ */
+function shortestPathBFS(start, end, graph) {
+  const BFSCreatePrev = () => {
+    const visitedArray = new Array(graph.size).fill(false);
+    const queue = new Queue();
+
+    const prev = new Array(graph.size);
+
+    queue.enqueue(start);
+    // Nodes gets visited mark when they enqueue the queue not when they are actually visited
+    visitedArray[start] = true;
+
+    while (!queue.isEmpty()) {
+      const node = queue.dequeue();
+      // Could stop when `node` === `end`
+
+      const neighbors = graph.adjacencyList[node];
+
+      neighbors.forEach((n) => {
+        if (visitedArray[n] === false) {
+          queue.enqueue(n);
+          visitedArray[n] = true;
+
+          // `node` is parent of `prev`
+          prev[n] = node;
+        }
+      });
+    }
+
+    return prev;
+  };
+
+  const parentArray = BFSCreatePrev();
+
+  let path = [];
+  // If we get `i` as undefined as value that could mean two things
+  //  - Node is root stop searching
+  //  - Node haven't visited and we tried to parentArray[10] and got `undefined`
+  for (let cur = end; cur !== undefined; cur = parentArray[cur]) {
+    path.push(cur);
+  }
+  path = path.reverse();
+
+  // If first element of path is not start then there is no path from `start` to `end` so return empty path
+  return path[0] === start ? path : [];
+}
+
 export {
   dfs,
   isCyclic,
@@ -399,4 +451,5 @@ export {
   prim,
   topologicalSort,
   connectedComponents,
+  shortestPathBFS,
 };

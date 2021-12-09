@@ -10,6 +10,7 @@ import {
   isCyclicUndirected,
   topologicalSort,
   connectedComponents,
+  shortestPathBFS,
 } from "./Algorithms";
 import WeightedGraph from "./WeightedGraph";
 
@@ -25,6 +26,7 @@ const groups = {
   undirected: "Undirected",
   topological: "Topological sort",
   connected: "Connected Components:",
+  BFSShortest: "Shortest Path with bfs",
 };
 
 /* eslint-disable */
@@ -138,6 +140,12 @@ conGraph.addEdge(4, 5);
 conGraph.addEdge(5, 3);
 
 console.group(groups.connected);
-console.dir(conGraph);
+console.dir(conGraph.adjacencyList);
 console.log(connectedComponents(conGraph));
 console.groupEnd(groups.connected);
+
+console.group(groups.BFSShortest);
+conGraph.addEdge(2, 4);
+console.dir(conGraph.adjacencyList);
+console.log(shortestPathBFS(0, 5, conGraph));
+console.groupEnd(groups.BFSShortest);
