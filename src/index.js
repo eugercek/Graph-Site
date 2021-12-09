@@ -9,6 +9,7 @@ import {
   prim,
   isCyclicUndirected,
   topologicalSort,
+  connectedComponents,
 } from "./Algorithms";
 import WeightedGraph from "./WeightedGraph";
 
@@ -23,6 +24,7 @@ const groups = {
   prim: "Prim's algorithm",
   undirected: "Undirected",
   topological: "Topological sort",
+  connected: "Connected Components:",
 };
 
 /* eslint-disable */
@@ -124,3 +126,18 @@ console.group(groups.topological);
 console.dir(topo);
 topologicalSort(topo);
 console.groupEnd(groups.topological);
+
+const conGraph = new UndirectedGraph(7);
+
+conGraph.addEdge(0, 1);
+conGraph.addEdge(1, 2);
+conGraph.addEdge(2, 0);
+
+conGraph.addEdge(3, 4);
+conGraph.addEdge(4, 5);
+conGraph.addEdge(5, 3);
+
+console.group(groups.connected);
+console.dir(conGraph);
+console.log(connectedComponents(conGraph));
+console.groupEnd(groups.connected);

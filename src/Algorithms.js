@@ -317,7 +317,7 @@ function prim(graph) {
 }
 
 /**
- * @param {WeightedGraph} graph
+ * @param {Graph} graph
  * @returns {Array}
  */
 function topologicalSort(graph) {
@@ -352,6 +352,44 @@ function topologicalSort(graph) {
   return order.reverse();
 }
 
+/**
+ * @param {WeightedGraph} graph
+ * @returns {number}
+ */
+function connectedComponents(graph) {
+  // Also could look at default id value but for sake of simplicity used another array
+  const visitedNodes = new Array(graph.size).fill(false);
+  const nodeIdList = new Array(graph.size).fill(-1);
+  let id = 0;
+
+  // Simple DFS
+  const recur = (node) => {
+    if (visitedNodes[node] !== false) {
+      return;
+    }
+
+    nodeIdList[node] = id;
+    visitedNodes[node] = true;
+
+    const neighbors = graph.adjacencyList[node];
+
+    neighbors.forEach((n) => recur(n));
+  };
+
+  for (let i = 0; i < graph.size; i++) {
+    // Check is for semantic reasons
+    // If node already have visited it must have a group, aka id
+    if (visitedNodes[i] === false) {
+      recur(i);
+      id += 1;
+    }
+  }
+
+  console.dir(nodeIdList);
+
+  return id;
+}
+
 export {
   dfs,
   isCyclic,
@@ -360,4 +398,5 @@ export {
   allCycles,
   prim,
   topologicalSort,
+  connectedComponents,
 };
