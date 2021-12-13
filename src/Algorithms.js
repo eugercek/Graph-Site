@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-console */
@@ -480,6 +481,55 @@ function dijkstra(graph, start) {
   return { distanceArray, prevArray };
 }
 
+/**
+ *
+ * @param {WeightedGraph} graph
+ */
+
+function bellmanFord(graph) {
+  const distanceArray = new Array(graph.size).fill(Infinity);
+  const prevArray = new Array(graph.size);
+
+  distanceArray[0] = 0;
+  // V - 1 times
+  for (let i = 0; i < graph.adjacencyList.length - 1; i++) {
+    let hasChanged = false;
+    for (let from = 0; from < graph.adjacencyList.length; from++) {
+      for (const { to, weight } of graph.adjacencyList[from]) {
+        const newDistance = distanceArray[from] + weight;
+        if (newDistance < distanceArray[to]) {
+          distanceArray[to] = newDistance;
+          prevArray[to] = from;
+          hasChanged = true;
+        }
+      }
+    }
+    if (!hasChanged) {
+      return { distanceArray, prevArray };
+    }
+  }
+
+  // Fill negative infinities if any
+
+  for (let i = 0; i < graph.adjacencyList.length - 1; i++) {
+    let hasChanged = false;
+    for (let from = 0; from < graph.adjacencyList.length - 1; from++) {
+      for (const { to, weight } of graph.adjacencyList[from]) {
+        const newDistance = distanceArray[from] + weight;
+        if (newDistance < distanceArray[to]) {
+          distanceArray[to] = "-∞";
+          prevArray[to] = from;
+          hasChanged = true;
+        }
+      }
+    }
+    if (!hasChanged) {
+      throw new Error("Negative Cycle");
+    }
+  }
+
+  return { distanceArray, prevArray };
+}
 export {
   dfs,
   isCyclic,
@@ -491,4 +541,5 @@ export {
   connectedComponents,
   shortestPathBFS,
   dijkstra,
+  bellmanFord,
 };

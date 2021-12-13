@@ -14,7 +14,7 @@ export default class WeightedGraph {
     this.adjacencyList[from].push({ to, weight });
   }
 
-  toString() {
+  print() {
     console.dir(this.adjacencyList);
   }
 }

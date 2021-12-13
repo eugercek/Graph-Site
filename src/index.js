@@ -14,6 +14,7 @@ import {
 } from "./Algorithms";
 import WeightedGraph from "./WeightedGraph";
 import dijkstraDemo from "./demos/Dijkstra";
+import bellmanFordDemo from "./demos/BellmanFord";
 
 // const foo = new Graph(7);
 
@@ -149,3 +150,4 @@ import dijkstraDemo from "./demos/Dijkstra";
 // console.groupEnd(groups.BFSShortest);
 
 dijkstraDemo();
+bellmanFordDemo();
