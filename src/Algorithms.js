@@ -3,6 +3,7 @@
 /* eslint-disable no-console */
 // eslint-disable-next-line no-unused-vars
 
+import PriorityQueue from "./data-structures/PriorityQueue";
 import Graph from "./Graph";
 import Queue from "./Queue";
 import UndirectedGraph from "./UndirectedGraph";
@@ -339,16 +340,16 @@ function topologicalSort(graph) {
 
     neighbors.forEach((n) => recur(n));
 
+    // When all of its children finished, stack has been popped until current `index` insert yourself
     order.push(index);
   };
 
+  // Topological sort is not one DFS you need to visit every node
+  // That's the reason of for
   for (let i = 0; i < graph.adjacencyList.length; i++) {
-    if (visitedNodes[i] !== false) {
-      // eslint-disable-next-line no-continue
-      continue;
+    if (visitedNodes[i] === false) {
+      recur(i);
     }
-
-    recur(i);
   }
 
   return order.reverse();
@@ -442,6 +443,43 @@ function shortestPathBFS(start, end, graph) {
   return path[0] === start ? path : [];
 }
 
+/**
+ *
+ * @param {WeightedGraph} graph
+ * @param {number} start
+ */
+function dijkstra(graph, start) {
+  const visitedArray = new Array(graph.size).fill(false);
+  const PQ = new PriorityQueue();
+  const distanceArray = new Array(graph.size).fill(Infinity);
+  const prevArray = new Array(graph.size);
+
+  distanceArray[start] = 0;
+
+  PQ.enqueue({ node: 0, dist: 0 });
+
+  while (!PQ.empty()) {
+    // from is the left node on adjacency list
+    const { node: from, dist } = PQ.dequeue();
+
+    visitedArray[from] = true;
+
+    graph.adjacencyList[from].forEach(({ to, weight }) => {
+      let newDistance;
+      if (!visitedArray[to]) {
+        newDistance = distanceArray[from] + weight;
+        if (newDistance < distanceArray[to]) {
+          distanceArray[to] = newDistance;
+          prevArray[to] = from;
+          PQ.enqueue({ node: to, dist: newDistance });
+        }
+      }
+    });
+  }
+
+  return { distanceArray, prevArray };
+}
+
 export {
   dfs,
   isCyclic,
@@ -452,4 +490,5 @@ export {
   topologicalSort,
   connectedComponents,
   shortestPathBFS,
+  dijkstra,
 };
